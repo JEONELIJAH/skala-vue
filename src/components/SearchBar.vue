@@ -1,6 +1,6 @@
 <script setup>
 import BaseDashboardCard from './BaseDashboardCard.vue'
-
+import { onBeforeUpdate, onUpdated } from 'vue';
 defineProps({
   query: {
     type: String,
@@ -11,8 +11,15 @@ defineProps({
 const emit = defineEmits(['update-query'])
 
 const updateQuery = (event) => {
-  emit('update-query', event.currentTarget.value)
+  emit('update-query', event.currentTarget.value.trim())
 }
+
+const log = (hook) => {
+  console.log(`[WeatherChild] ${hook}`)
+}
+
+onBeforeUpdate(() => log('onBeforeUpdate'))
+onUpdated(() => log('onUpdated'))
 </script>
 
 <template>
@@ -26,7 +33,7 @@ const updateQuery = (event) => {
       :value="query"
       placeholder="예: 수원"
       autocomplete="off"
-      @input="updateQuery"
+      @change="updateQuery"
     />
 
     <p class="search-status" aria-live="polite">

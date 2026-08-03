@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch, watchEffect } from 'vue'
+import { computed, ref, watch, watchEffect, onBeforeUpdate, onUpdated} from 'vue'
 import BaseDashboardCard from './BaseDashboardCard.vue'
 import SearchBar from './SearchBar.vue'
 import WeatherCard from './WeatherCard.vue'
@@ -41,6 +41,13 @@ const selectCity = (city) => {
 const showDetail = (city) => {
   window.alert(`${city.name}의 현재 날씨는 [${city.status}] 상태입니다.`)
 }
+
+const log = (hook) => {
+  console.log(`[WeatherParent] ${hook}`)
+}
+
+onBeforeUpdate(() => log('onBeforeUpdate'))
+onUpdated(() => log('onUpdated'))
 </script>
 
 <template>
