@@ -21,8 +21,8 @@ const filteredWeatherList = computed(() => {
 })
 
 watch(selectedCityInfo, (newCity, oldCity) => {
-  const oldName = oldCity.name
-  const newName = newCity.name
+  const oldName = oldCity?.name ?? '선택 없음'
+  const newName = newCity?.name ?? '선택 없음'
   console.log(`[watch] 상태바 문구 변경: ${oldName} → ${newName}`)
 })
 
