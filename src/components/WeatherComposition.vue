@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { computed, ref, watch, watchEffect } from 'vue'
 
 const searchQuery = ref('')
 const selectedCityInfo = ref(null)
@@ -8,6 +8,26 @@ const weatherList = ref([
   { id: 'city_02', name: '수원', temp: 24, status: '비' },
   { id: 'city_03', name: '부산', temp: 26, status: '구름' },
 ])
+
+const filteredWeatherList = computed(() => {
+  const query = searchQuery.value.trim()
+
+  if (query === '') {
+    return weatherList.value
+  }
+
+  return weatherList.value.filter((city) => city.name.includes(query))
+})
+
+watch(selectedCityInfo, (newCity, oldCity) => {
+  const oldName = oldCity.name
+  const newName = newCity.name
+  console.log(`[watch] 상태바 문구 변경: ${oldName} → ${newName}`)
+})
+
+watchEffect(() => {
+  console.log(`[watchEffect] 현재 검색어: "${searchQuery.value}"`)
+})
 
 const updateSearchQuery = (event) => {
   searchQuery.value = event.currentTarget.value
@@ -24,7 +44,7 @@ const showDetail = (city) => {
 
 <template>
   <main class="weather-mockup">
-    <h1>🌤️ 과제 1: 날씨 (Mockup)</h1>
+    <h1>🌤️ 과제 2: 날씨 (Composition)</h1>
 
     <section class="dashboard-box" aria-labelledby="search-title">
       <h2 id="search-title">🔍 도시 검색</h2>
@@ -47,9 +67,9 @@ const showDetail = (city) => {
     <section class="dashboard-box" aria-labelledby="weather-title">
       <h2 id="weather-title">🌆 지역별 날씨 현황</h2>
 
-      <ul class="weather-list">
+      <ul v-if="filteredWeatherList.length > 0" class="weather-list">
         <li
-          v-for="city in weatherList"
+          v-for="city in filteredWeatherList"
           :key="city.id"
           class="weather-list__item"
           @click="selectCity(city)"
@@ -85,6 +105,8 @@ const showDetail = (city) => {
           </article>
         </li>
       </ul>
+
+      <p v-else class="empty-message" role="status">검색 결과가 일치하는 도시가 없습니다.</p>
     </section>
 
     <p class="selection-status" aria-live="polite">
