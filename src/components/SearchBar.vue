@@ -33,7 +33,7 @@ onUpdated(() => log('onUpdated'))
       :value="query"
       placeholder="예: 수원"
       autocomplete="off"
-      @change="updateQuery"
+      @input="updateQuery"
     />
 
     <p class="search-status" aria-live="polite">
