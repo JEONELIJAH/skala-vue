@@ -11,7 +11,7 @@ import {
 import HelloWorld from './components/HelloWorld.vue'
 import LifeCycleHookParent from './components/practice/LifeCycleHookParent.vue'
 import SlotParent from './components/practice/SlotParent.vue'
-import WeatherComposition from './components/WeatherComposition.vue'
+import WeatherParent from './components/WeatherParent.vue'
 
 const log = (hook) => {
   console.log(`[App] ${hook}`)
@@ -43,7 +43,7 @@ onUnmounted(() => log('onUnmounted'))
 
   <SlotParent />
   <RouterView />
-  <WeatherComposition />
+  <WeatherParent />
 </template>
 
 <style scoped>
