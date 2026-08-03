@@ -11,6 +11,7 @@ import {
 import HelloWorld from './components/HelloWorld.vue'
 import LifeCycleHookParent from './components/practice/LifeCycleHookParent.vue'
 import SlotParent from './components/practice/SlotParent.vue'
+import WeatherMockup from './components/WeatherMockup.vue'
 
 const log = (hook) => {
   console.log(`[App] ${hook}`)
@@ -41,8 +42,8 @@ onUnmounted(() => log('onUnmounted'))
   <LifeCycleHookParent />
 
   <SlotParent />
-
   <RouterView />
+  <WeatherMockup />
 </template>
 
 <style scoped>
