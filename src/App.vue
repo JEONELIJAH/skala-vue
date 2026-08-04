@@ -12,6 +12,7 @@ import {
 // import LifeCycleHookParent from './components/practice/LifeCycleHookParent.vue'
 // import SlotParent from './components/practice/SlotParent.vue'
 // import WeatherHomeView from '/views/WeatherHomeView.vue/index.js'
+// import StoreCounter from './components/practice/library/StoreCounter.vue'
 
 const log = (hook) => {
   console.log(`[App] ${hook}`)
@@ -33,6 +34,7 @@ onUnmounted(() => log('onUnmounted'))
         <RouterLink class="navigation" :to="{ name: 'weather-about' }">ℹ️ 서비스 소개</RouterLink>
       </nav>
     </header>
+  <!-- <StoreCounter /> -->
   <RouterView />
 </template>
 
