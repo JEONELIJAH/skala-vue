@@ -13,6 +13,11 @@ const router = createRouter({
       name: 'weather-about',
       component: () => import('../views/WeatherAboutView.vue'),
     },
+    {
+      path: '/:pathMathch(.*)*',
+      name: 'not-found',
+      component: () => import('../views/NotFoundView.vue'),
+    }
   ],
 })
 
