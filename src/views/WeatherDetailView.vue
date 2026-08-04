@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps } from 'vue'
+import { defineProps, ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
@@ -13,11 +13,11 @@ const props = defineProps({
 })
 
 const cities = [
-  { id: 'city_01', name: '서울특별시', temp: 28, status: '맑음', humidity: 55, wind: 2.5 },
-  { id: 'city_02', name: '수원시', temp: 24, status: '비', humidity: 70, wind: 1.8 },
-  { id: 'city_03', name: '부산광역시', temp: 26, status: '구름', humidity: 65, wind: 3.1 },
-  { id: 'city_04', name: '인천광역시', temp: 21, status: '맑음', humidity: 52, wind: 2.1 },
-  { id: 'city_05', name: '제주시', temp: 26, status: '바람', humidity: 60, wind: 4.2 },
+  { id: 1, name: '서울특별시', temp: 28, status: '맑음', humidity: 55, wind: 2.5 },
+  { id: 2, name: '수원시', temp: 24, status: '비', humidity: 70, wind: 1.8 },
+  { id: 3, name: '부산광역시', temp: 26, status: '구름', humidity: 65, wind: 3.1 },
+  { id: 4, name: '인천광역시', temp: 21, status: '맑음', humidity: 52, wind: 2.1 },
+  { id: 5, name: '제주시', temp: 26, status: '바람', humidity: 60, wind: 4.2 },
 ]
 
 const handleGoHome = () => {

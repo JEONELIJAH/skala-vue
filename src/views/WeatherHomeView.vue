@@ -9,11 +9,11 @@ const router = useRouter()
 const searchQuery = ref('')
 const selectedCityInfo = ref(null)
 const weatherList = ref([
-  { id: 'city_01', name: '서울', temp: 28, status: '맑음' },
-  { id: 'city_02', name: '수원', temp: 24, status: '비' },
-  { id: 'city_03', name: '부산', temp: 26, status: '구름' },
-  { id: 'city_04', name: '인천', temp: 21, status: '맑음' },
-  { id: 'city_05', name: '제주', temp: 26, status: '바람' },
+  { id: 1, name: '서울', temp: 28, status: '맑음' },
+  { id: 2, name: '수원', temp: 24, status: '비' },
+  { id: 3, name: '부산', temp: 26, status: '구름' },
+  { id: 4, name: '인천', temp: 21, status: '맑음' },
+  { id: 5, name: '제주', temp: 26, status: '바람' },
 ])
 
 const filteredWeatherList = computed(() => {
