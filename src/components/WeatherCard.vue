@@ -27,7 +27,8 @@ const emit = defineEmits(['select-card', 'click-detail'])
       <span v-if="city.temp >= 25" class="temperature-label temperature-label--hot">
         🔥 더움 (25도 이상)
       </span>
-      <span v-else class="temperature-label temperature-label--cool"> ❄️ 선선함 (25도 미만) </span>
+      <span v-else-if="city.temp < 25 && city.temp >= 22" class="temperature-label temperature-label--mild"> 🍃 선선함 (22-24도) </span>
+      <span v-else class="temperature-label temperature-label--cold"> ❄️ 쌀쌀함 (22도 미만) </span>
     </button>
 
     <button
@@ -108,7 +109,11 @@ const emit = defineEmits(['select-card', 'click-detail'])
   background: #e53e3e;
 }
 
-.temperature-label--cool {
+.temperature-label--mild {
+  background: #129600;
+}
+
+.temperature-label--cold {
   background: #3182ce;
 }
 
