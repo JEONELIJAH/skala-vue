@@ -1,5 +1,8 @@
 <script setup>
-defineProps({
+import { computed } from 'vue'
+import { useConfigStore } from '@/stores/configStore';
+
+const props = defineProps({
   city: {
     type: Object,
     required: true,
@@ -8,6 +11,18 @@ defineProps({
     type: Boolean,
     default: false,
   },
+})
+
+const configStore = useConfigStore()
+
+const displayTemp = computed(() => {
+  const rawTemp = props.city.temp
+
+  if (configStore.unit === 'fahrenheit') {
+    return Math.round((rawTemp * 9) / 5 + 32)
+  }
+
+  return rawTemp
 })
 
 const emit = defineEmits(['select-card', 'click-detail'])
@@ -22,7 +37,7 @@ const emit = defineEmits(['select-card', 'click-detail'])
       @click="emit('select-card')"
     >
       <strong>{{ city.name }} ({{ city.status }})</strong>
-      <span>현재 기온: {{ city.temp }}°C</span>
+      <span>현재 기온: {{ displayTemp }} {{ configStore.unitSymbol }}</span>
 
       <span v-if="city.temp >= 25" class="temperature-label temperature-label--hot">
         🔥 더움 (25도 이상)

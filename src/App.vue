@@ -8,6 +8,7 @@ import {
   onBeforeUnmount,
   onBeforeUpdate,
 } from 'vue'
+import UnitToggler from './components/exercise/UnitToggler.vue'
 // import HelloWorld from './components/HelloWorld.vue'
 // import LifeCycleHookParent from './components/practice/LifeCycleHookParent.vue'
 // import SlotParent from './components/practice/SlotParent.vue'
@@ -32,6 +33,7 @@ onUnmounted(() => log('onUnmounted'))
       <nav class="navigation-menu">
         <RouterLink class="navigation" :to="{ name: 'weather-home' }">⛅ 날씨 대시보드</RouterLink>
         <RouterLink class="navigation" :to="{ name: 'weather-about' }">ℹ️ 서비스 소개</RouterLink>
+        <UnitToggler />
       </nav>
     </header>
   <!-- <StoreCounter /> -->

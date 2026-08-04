@@ -1,9 +1,11 @@
 <script setup>
-import { defineProps, ref, onMounted } from 'vue'
+import { defineProps, ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useConfigStore } from '@/stores/configStore'
 
 const route = useRoute()
 const router = useRouter()
+const configStore = useConfigStore()
 
 const props = defineProps({
     cityId: {
@@ -19,6 +21,20 @@ const cities = [
   { id: 4, name: '인천광역시', temp: 21, status: '맑음', humidity: 52, wind: 2.1 },
   { id: 5, name: '제주시', temp: 26, status: '바람', humidity: 60, wind: 4.2 },
 ]
+
+const displayTemp = computed(() => {
+  const rawTemp = city.value?.temp
+
+  if (rawTemp == null) {
+    return ''
+  }
+
+  if (configStore.unit === 'fahrenheit') {
+    return Math.round((rawTemp * 9) / 5 + 32)
+  }
+
+  return rawTemp
+})
 
 const handleGoHome = () => {
     router.push('/')
@@ -42,7 +58,7 @@ onMounted(() => {
 
       <div class="weather-summary">
         <p>📍 지정 지역: 대한민국 {{ city.name }}</p>
-        <p>실시간 기온: {{ city.temp }}°C</p>
+        <p>실시간 기온: {{ displayTemp }}{{ configStore.unitSymbol }}</p>
         <p>기상 현황: {{ city.status }}</p>
         <p>대기 습도: {{ city.humidity }}%</p>
         <p>현재 풍속: {{ city.wind }}m/s</p>
