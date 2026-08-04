@@ -47,7 +47,7 @@ onUnmounted(() => log('onUnmounted'))
 }
 
 .header h1 {
-  width: 100%;
+  width: min(100%, 60rem);
   margin: 0;
   padding-bottom: 1rem;
   border-bottom: 1px solid var(--color-border);
