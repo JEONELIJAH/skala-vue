@@ -79,7 +79,7 @@ onUpdated(() => log('onUpdated'))
             :city="city"
             :selected="selectedCityInfo?.id === city.id"
             @select-card="selectCity(city)"
-            @click-detail="showDetail(city)"
+            @click-detail="handleGoDetail(city)"
           />
         </li>
       </ul>
