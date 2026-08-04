@@ -1,9 +1,11 @@
 <script setup>
 import { computed, ref, watch, watchEffect, onBeforeUpdate, onUpdated} from 'vue'
+import { useRouter } from 'vue-router'
 import BaseDashboardCard from '../components/exercise/BaseDashboardCard.vue'
 import SearchBar from '../components/exercise/SearchBar.vue'
 import WeatherCard from '../components/exercise/WeatherCard.vue'
 
+const router = useRouter()
 const searchQuery = ref('')
 const selectedCityInfo = ref(null)
 const weatherList = ref([
@@ -48,13 +50,29 @@ const log = (hook) => {
   console.log(`[WeatherParent] ${hook}`)
 }
 
+const handleGoHome = () => {
+  router.push('/')
+}
+
+const handleGoAbout = () => {
+  router.push({
+    name: 'WeatherAbout'
+  })
+}
+
 onBeforeUpdate(() => log('onBeforeUpdate'))
 onUpdated(() => log('onUpdated'))
 </script>
 
 <template>
   <main class="weather-mockup">
-    <h1>🌤️ 과제 3: 날씨 (컴포넌트)</h1>
+    <h1>🌤️ 전우진의 날씨 정보 </h1>
+
+    <nav class="navigation-menu">
+      <button class="navigation" type="button" @click="handleGoHome">⛅ 날씨 대시보드</button>
+      <button class="navigation" type="button" @click="handleGoAbout">ℹ️ 서비스 소개</button>
+    </nav>
+
 
     <SearchBar :query="searchQuery" @update-query="updateSearchQuery" />
 
@@ -83,11 +101,36 @@ onUpdated(() => log('onUpdated'))
 </template>
 
 <style scoped>
+.navigation-menu {
+  display: flex;
+  gap: 1rem;
+}
+
+.navigation {
+  flex: 1;
+  min-height: 2.75rem;
+  padding: 0.85rem 1rem;
+  gap: 0.75rem;
+  align-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: 0.6rem;
+  background: var(--color-background-soft);
+  color: var(--color-text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.navigation:hover {
+  border-color: var(--color-border-hover);
+  background: var(--color-background-mute);
+}
+
 .weather-mockup {
   display: grid;
   grid-column: 1 / -1;
   gap: 1rem;
-  width: min(100%, 44rem);
+  width: 100%;
+  max-width: 60rem;
   margin: 2rem auto;
 }
 
