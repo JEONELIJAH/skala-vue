@@ -1,8 +1,8 @@
 <script setup>
 import { computed, ref, watch, watchEffect, onBeforeUpdate, onUpdated} from 'vue'
-import BaseDashboardCard from '../components/BaseDashboardCard.vue'
-import SearchBar from '../components/SearchBar.vue'
-import WeatherCard from '../components/WeatherCard.vue'
+import BaseDashboardCard from '../components/exercise/BaseDashboardCard.vue'
+import SearchBar from '../components/exercise/SearchBar.vue'
+import WeatherCard from '../components/exercise/WeatherCard.vue'
 
 const searchQuery = ref('')
 const selectedCityInfo = ref(null)
