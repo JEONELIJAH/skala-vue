@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import WeatherHomeView from '../views/WeatherHomeView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -7,7 +6,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'weather-home',
-      component: WeatherHomeView,
+      component: () => import('../views/WeatherHomeView.vue'),
     },
     {
       path: '/about',
