@@ -8,10 +8,10 @@ import {
   onBeforeUnmount,
   onBeforeUpdate,
 } from 'vue'
-import HelloWorld from './components/HelloWorld.vue'
-import LifeCycleHookParent from './components/practice/LifeCycleHookParent.vue'
-import SlotParent from './components/practice/SlotParent.vue'
-import WeatherParent from './components/WeatherParent.vue'
+// import HelloWorld from './components/HelloWorld.vue'
+// import LifeCycleHookParent from './components/practice/LifeCycleHookParent.vue'
+// import SlotParent from './components/practice/SlotParent.vue'
+// import WeatherHomeView from '/views/WeatherHomeView.vue/index.js'
 
 const log = (hook) => {
   console.log(`[App] ${hook}`)
@@ -26,24 +26,19 @@ onUnmounted(() => log('onUnmounted'))
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+    <!-- <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" /> -->
 
     <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
+      <!-- <HelloWorld msg="You did it!" /> -->
         <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
+        <!-- <RouterLink to="/about">About</RouterLink> -->
     </div>
-  </header>
 
-  <LifeCycleHookParent />
+  <!-- <LifeCycleHookParent /> -->
 
-  <SlotParent />
+  <!-- <SlotParent /> -->
   <RouterView />
-  <WeatherParent />
+  <!-- <WeatherParent /> -->
 </template>
 
 <style scoped>
