@@ -17,6 +17,11 @@ const router = createRouter({
       path: '/:pathMathch(.*)*',
       name: 'not-found',
       component: () => import('../views/NotFoundView.vue'),
+    },
+    {
+      path: '/weather/:cityId',
+      name: 'weather-detail',
+      component: () => import('../views/WeatherDetailView.vue'),
     }
   ],
 })

@@ -42,8 +42,12 @@ const selectCity = (city) => {
   selectedCityInfo.value = city
 }
 
-const showDetail = (city) => {
-  window.alert(`${city.name}의 현재 날씨는 [${city.status}] 상태입니다.`)
+const handleGoDetail = (city) => {
+  // window.alert(`${city.name}의 현재 날씨는 [${city.status}] 상태입니다.`)
+  router.push({
+    name: 'weather-detail',
+    params: {cityId: city.id}
+  })
 }
 
 const log = (hook) => {
