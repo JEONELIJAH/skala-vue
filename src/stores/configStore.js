@@ -7,7 +7,7 @@ export const useConfigStore = defineStore('config', () => {
 
     // getters
     const unitSymbol = computed(() => {
-        return unit.value === 'celsius' ? 'C' : 'F'
+        return unit.value === 'celsius' ? '℃' : '℉'
     })
 
     // actions
