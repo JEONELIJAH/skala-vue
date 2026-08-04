@@ -46,6 +46,7 @@ const handleChildEvent = (value) => {
     <LifeCycleHookChild
       v-if="showChild"
       :parent-count="parentCount"
+      :child-count="childCount"
       @child-count="handleChildEvent"
     />
   </main>

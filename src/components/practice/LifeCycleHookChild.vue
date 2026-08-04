@@ -15,6 +15,10 @@ const props = defineProps({
     type: Number,
     required: true,
   },
+  childCount: {
+    type: Number,
+    required: true,
+  }
 })
 
 const emit = defineEmits(['child-count'])
