@@ -1,10 +1,9 @@
 <script setup>
 import { defineProps, ref, onMounted, computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { useConfigStore } from '@/stores/configStore'
 import axios from 'axios'
 
-const route = useRoute()
 const router = useRouter()
 const configStore = useConfigStore()
 const isLoading = ref(false)
@@ -32,7 +31,7 @@ const cityMapping = {
 const displayTemp = computed(() => {
   const rawTemp = city.value?.temp
 
-  if (rawTemp == null) {
+  if (rawTemp === null) {
     return ''
   }
 
