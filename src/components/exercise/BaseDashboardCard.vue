@@ -1,14 +1,22 @@
 <template>
-  <section class="dashboard-box">
+  <el-card class="dashboard-box" shadow="never">
     <slot />
-  </section>
+  </el-card>
 </template>
 
 <style scoped>
 .dashboard-box {
-  padding: 1rem;
-  border: 1px solid var(--color-border);
-  border-radius: 0.75rem;
-  background: var(--color-background-soft);
+  border-color: var(--glass-border);
+  border-radius: 1.05rem;
+  background: var(--glass-surface);
+  box-shadow:
+    var(--shadow-card),
+    inset 0 1px 0 rgb(255 255 255 / 7%);
+  backdrop-filter: var(--glass-filter);
+  -webkit-backdrop-filter: var(--glass-filter);
+}
+
+.dashboard-box :deep(.el-card__body) {
+  padding: clamp(1rem, 3vw, 1.5rem);
 }
 </style>
