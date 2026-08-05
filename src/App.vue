@@ -31,14 +31,30 @@ onUnmounted(() => log('onUnmounted'))
 </script>
 
 <template>
-    <header class="header">
-      <h1>🌤️ 전우진의 날씨 정보 </h1>
-      <nav class="navigation-menu">
-        <RouterLink class="navigation" :to="{ name: 'weather-home' }">⛅ 날씨 대시보드</RouterLink>
-        <RouterLink class="navigation" :to="{ name: 'weather-about' }">ℹ️ 서비스 소개</RouterLink>
-        <UnitToggler />
-      </nav>
-    </header>
+  <header class="header">
+    <h1>🌤️ 전우진의 날씨 정보</h1>
+    <nav class="navigation-menu" aria-label="주요 메뉴">
+      <RouterLink v-slot="{ isExactActive, navigate }" custom :to="{ name: 'weather-home' }">
+        <el-button
+          class="navigation"
+          :class="{ 'navigation--active': isExactActive }"
+          @click="navigate"
+        >
+          ⛅ 날씨 대시보드
+        </el-button>
+      </RouterLink>
+      <RouterLink v-slot="{ isExactActive, navigate }" custom :to="{ name: 'weather-about' }">
+        <el-button
+          class="navigation"
+          :class="{ 'navigation--active': isExactActive }"
+          @click="navigate"
+        >
+          ℹ️ 서비스 소개
+        </el-button>
+      </RouterLink>
+      <UnitToggler />
+    </nav>
+  </header>
   <RouterView />
 </template>
 
@@ -49,7 +65,7 @@ onUnmounted(() => log('onUnmounted'))
   align-items: center;
   width: 100%;
   max-height: none;
-  margin-top: 5rem;
+  margin-top: clamp(2.5rem, 8vh, 5rem);
 }
 
 .header h1 {
@@ -64,41 +80,64 @@ onUnmounted(() => log('onUnmounted'))
 
 .navigation-menu {
   display: flex;
-  gap: 1rem;
+  gap: 0.625rem;
+  align-items: center;
   width: 100%;
   max-width: 60rem;
+  margin-top: 1rem;
+  padding: 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  background: var(--color-background-soft);
+  box-shadow: 0 0.4rem 1rem rgb(0 0 0 / 12%);
 }
 
 .navigation {
-  flex: 1;
-  min-height: 2.75rem;
-  padding: 0.85rem 1rem;
-  gap: 0.75rem;
-  align-items: center;
-  border: 1px solid var(--color-border);
-  border-radius: 0.6rem;
-  background: var(--color-background-soft);
+  flex: 0 1 13rem;
+  height: 2.75rem;
+  border-radius: 0.55rem;
+  font-weight: 700;
+  --el-button-bg-color: transparent;
+  --el-button-border-color: transparent;
+  --el-button-text-color: var(--color-text);
+  --el-button-hover-bg-color: rgb(66 184 131 / 12%);
+  --el-button-hover-border-color: rgb(66 184 131 / 45%);
+  --el-button-hover-text-color: #61dba7;
+  --el-button-active-bg-color: rgb(66 184 131 / 20%);
+  --el-button-active-border-color: #42b883;
+  --el-button-active-text-color: #8ff0c5;
+}
+
+.navigation--active {
+  --el-button-bg-color: rgb(66 184 131 / 18%);
+  --el-button-border-color: #42b883;
+  --el-button-text-color: #8ff0c5;
+  --el-button-hover-bg-color: rgb(66 184 131 / 26%);
+  --el-button-hover-border-color: #61dba7;
+  --el-button-hover-text-color: #b8f7d8;
+  box-shadow: inset 0 0 0 1px rgb(66 184 131 / 12%);
+}
+
+.navigation-menu :deep(.unit-toggler) {
+  padding: 0 0.5rem;
   color: var(--color-text);
-  font: inherit;
-  cursor: pointer;
 }
 
-.navigation:hover {
-  border-color: var(--color-border-hover);
-  background: var(--color-background-mute);
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
+@media (max-width: 40rem) {
+  .navigation-menu {
+    flex-wrap: wrap;
   }
 
-  nav {
-    text-align: center;
-    font-size: 1rem;
-    padding: 1rem 0;
-    margin-top: 1rem;
+  .navigation {
+    flex: 1 1 calc(50% - 0.313rem);
+  }
+
+  .navigation-menu :deep(.unit-toggler) {
+    justify-content: flex-end;
+    width: 100%;
+    margin-left: 0;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--color-border);
   }
 }
 </style>
