@@ -71,6 +71,7 @@ export const useWeatherStore = defineStore('weather', () => {
             sunset: raw.sys?.sunset,
             timezoneOffset: raw.timezone,
           }),
+          timezone: raw.timezone,
         }
       })
       fetchedAt.value = Date.now()

@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, ref, onMounted, onUnmounted } from 'vue'
 import { useConfigStore } from '@/stores/configStore'
 import { ArrowRight } from '@element-plus/icons-vue'
 import { getWeatherBackground, getWeatherKind } from '@/utils/weatherVisuals'
@@ -16,6 +16,44 @@ const props = defineProps({
 })
 
 const configStore = useConfigStore()
+
+const currentTime = ref(Date.now())
+let timer = null
+
+// 1분마다 currentTime을 갱신하는 타이머를 작동시킵니다.
+onMounted(() => {
+  timer = setInterval(() => {
+    currentTime.value = Date.now()
+  }, 60000)
+})
+
+// 컴포넌트가 화면에서 사라지면 타이머를 꺼서 메모리 누수를 막습니다.
+onUnmounted(() => {
+  if (timer) clearInterval(timer)
+})
+
+// 실시간 currentTime과 도시의 timezone을 조합해 시각을 포맷팅합니다.
+const dynamicLocalTime = computed(() => {
+  if (props.city.timezone !== undefined) {
+    const now = new Date(currentTime.value)
+
+    // 현재 기기의 타임존 오프셋을 제거하여 순수 UTC 시간을 구합니다.
+    const utcTime = now.getTime() + now.getTimezoneOffset() * 60000
+
+    // 타겟 도시의 타임존 오프셋을 더합니다.
+    const targetTime = new Date(utcTime + props.city.timezone * 1000)
+
+    // Intl.DateTimeFormat을 사용하여 한국어 형식으로 시각을 포맷팅합니다. 12시간제와 분 단위까지 표시합니다.
+    return new Intl.DateTimeFormat('ko-KR', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+    }).format(targetTime)
+  }
+
+  // 만약 timezone 정보가 없다면 기존의 정적 데이터로 폴백(Fallback)
+  return props.city.localTime ?? '현재'
+})
 
 // 온도 단위를 변환하는 함수
 const convertTemp = (temperature) => {
@@ -49,7 +87,7 @@ const emit = defineEmits(['select-card', 'click-detail'])
       <span class="weather-card__top">
         <span class="weather-card__location">
           <strong>{{ city.name }}</strong>
-          <small>{{ city.localTime ?? '현재' }}</small>
+          <small>{{ dynamicLocalTime }}</small>
         </span>
         <span class="weather-card__temperature">
           <strong>{{ displayTemp }}</strong>
