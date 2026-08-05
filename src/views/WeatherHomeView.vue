@@ -159,6 +159,8 @@ onUpdated(() => log('onUpdated'))
 
 <template>
   <main class="weather-mockup">
+    <!-- SearchBar 컴포넌트에서 emit으로 보낸 @update-query 이벤트를 처리하여 검색어를 업데이트합니다. -->
+    <!-- 업데이트된 query는 :query prop을 통해 전달됩니다. -->
     <SearchBar :query="searchQuery" @update-query="updateSearchQuery" />
 
     <BaseDashboardCard>
