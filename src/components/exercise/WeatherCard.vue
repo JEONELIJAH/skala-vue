@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import { useConfigStore } from '@/stores/configStore';
+import { useConfigStore } from '@/stores/configStore'
 
 const props = defineProps({
   city: {
@@ -34,26 +34,31 @@ const emit = defineEmits(['select-card', 'click-detail'])
       class="weather-card__summary"
       type="button"
       :aria-pressed="selected"
+      :aria-label="`${city.name}, ${city.status}, 현재 기온 ${displayTemp}${configStore.unitSymbol}`"
       @click="emit('select-card')"
     >
-      <strong>{{ city.name }} ({{ city.status }})</strong>
+      <span class="weather-card__title">
+        <strong>{{ city.name }}</strong>
+        <el-tag type="info" effect="plain" round>{{ city.status }}</el-tag>
+      </span>
       <span>현재 기온: {{ displayTemp }} {{ configStore.unitSymbol }}</span>
 
-      <span v-if="city.temp >= 25" class="temperature-label temperature-label--hot">
-        🔥 더움
-      </span>
-      <span v-else-if="city.temp < 25 && city.temp >= 22" class="temperature-label temperature-label--mild"> 🍃 선선함 </span>
-      <span v-else class="temperature-label temperature-label--cold"> ❄️ 쌀쌀함 </span>
+      <el-tag v-if="city.temp >= 25" type="danger" effect="dark" round>🔥 더움</el-tag>
+      <el-tag v-else-if="city.temp < 25 && city.temp >= 22" type="success" effect="dark" round>
+        🍃 선선함
+      </el-tag>
+      <el-tag v-else type="primary" effect="dark" round>❄️ 쌀쌀함</el-tag>
     </button>
 
-    <button
+    <el-button
       class="weather-card__detail"
-      type="button"
+      type="primary"
+      plain
       :aria-label="`${city.name} 날씨 상세보기`"
       @click.stop="emit('click-detail')"
     >
       상세보기
-    </button>
+    </el-button>
   </article>
 </template>
 
@@ -95,8 +100,11 @@ const emit = defineEmits(['select-card', 'click-detail'])
   cursor: pointer;
 }
 
-.weather-card__summary strong {
-  font-weight: 700;
+.weather-card__title {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .weather-card__detail {
@@ -107,29 +115,10 @@ const emit = defineEmits(['select-card', 'click-detail'])
   color: inherit;
   font: inherit;
   font-weight: 600;
-  cursor: pointer;
 }
 
-.temperature-label {
-  display: inline-block;
-  margin-top: 0.25rem;
-  padding: 0.2rem 0.45rem;
-  border-radius: 0.35rem;
-  color: white;
-  font-size: 0.8rem;
-  font-weight: 700;
-}
-
-.temperature-label--hot {
-  background: #e53e3e;
-}
-
-.temperature-label--mild {
-  background: #129600;
-}
-
-.temperature-label--cold {
-  background: #3182ce;
+.weather-card__detail:hover {
+  background: var(--color-border);
 }
 
 @media (max-width: 36rem) {
