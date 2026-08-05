@@ -4,20 +4,26 @@ const configStore = useConfigStore()
 </script>
 
 <template>
-  <div style="text-align: center; margin-left: auto; display: inline-flex; align-items: center; gap: 8px">
-    <span>날씨단위: <strong>{{ configStore.unit === 'celsius' ? '섭씨(℃)' : '화씨(℉)' }}</strong></span>
-    <button @click="configStore.toggleUnit" class="toggle-btn">단위변경</button>
+  <div class="unit-toggler">
+    <el-switch
+      :model-value="configStore.unit === 'fahrenheit'"
+      size="large"
+      inline-prompt
+      active-text="℉"
+      inactive-text="℃"
+      aria-label="섭씨와 화씨 단위 변경"
+      @change="configStore.toggleUnit"
+    />
   </div>
 </template>
 
 <style scoped>
-.toggle-btn {
-  padding: 6px 10px;
-  background-color: #4b6584;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
+.unit-toggler {
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-left: auto;
+  white-space: nowrap;
+  font-weight: 600;
 }
 </style>
