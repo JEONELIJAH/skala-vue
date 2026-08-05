@@ -1,6 +1,5 @@
 <script setup>
 import {
-  ref,
   onBeforeMount,
   onMounted,
   onBeforeUpdate,
@@ -49,6 +48,6 @@ watch(
     <p>Parent count: {{ props.parentCount }}</p>
     <p>Child count: {{ childCount }}</p>
 
-    <button @click="(childCount++, emit('child-count', childCount))">자식만 변경</button>
+    <button @click="(emit('child-count', props.childCount + 1))">자식만 변경</button>
   </section>
 </template>
