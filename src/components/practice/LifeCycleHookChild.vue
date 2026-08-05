@@ -23,8 +23,6 @@ const props = defineProps({
 
 const emit = defineEmits(['child-count'])
 
-const childCount = ref(0)
-
 const log = (hook) => {
   console.log(`[Child] ${hook}`)
 }
