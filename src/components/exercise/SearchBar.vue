@@ -1,6 +1,6 @@
 <script setup>
 import BaseDashboardCard from './BaseDashboardCard.vue'
-import { onBeforeUpdate, onUpdated } from 'vue';
+import { onBeforeUpdate, onUpdated } from 'vue'
 defineProps({
   query: {
     type: String,
@@ -10,8 +10,8 @@ defineProps({
 
 const emit = defineEmits(['update-query'])
 
-const updateQuery = (event) => {
-  emit('update-query', event.currentTarget.value.trim())
+const updateQuery = (value) => {
+  emit('update-query', value.trim())
 }
 
 const log = (hook) => {
@@ -27,14 +27,17 @@ onUpdated(() => log('onUpdated'))
     <h2 id="search-title">🔍 도시 검색</h2>
 
     <label for="city-search">검색할 도시 이름</label>
-    <input
+    <el-input
       id="city-search"
-      type="search"
-      :value="query"
-      placeholder="예: 수원"
+      :model-value="query"
+      size="large"
+      placeholder="검색할 도시 이름 입력"
       autocomplete="off"
+      clearable
       @input="updateQuery"
-    />
+    >
+      <template #prefix><span aria-hidden="true">🔎</span></template>
+    </el-input>
 
     <p class="search-status" aria-live="polite">
       검색 중인 도시: <strong>{{ query }}</strong>
@@ -53,22 +56,6 @@ label {
   display: block;
   margin-bottom: 0.35rem;
   font-weight: 600;
-}
-
-input {
-  width: 100%;
-  min-height: 2.75rem;
-  padding: 0.65rem 0.75rem;
-  border: 1px solid var(--color-border-hover);
-  border-radius: 0.4rem;
-  background: var(--color-background);
-  color: var(--color-text);
-  font: inherit;
-}
-
-input:focus-visible {
-  outline: 3px solid rgb(66 184 131 / 35%);
-  outline-offset: 2px;
 }
 
 .search-status {
