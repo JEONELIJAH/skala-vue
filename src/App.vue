@@ -9,6 +9,7 @@ import {
   onBeforeUpdate,
 } from 'vue'
 import UnitToggler from './components/exercise/UnitToggler.vue'
+import UserForm from './components/practice/UserForm.vue'
 // import HelloWorld from './components/HelloWorld.vue'
 // import LifeCycleHookParent from './components/practice/LifeCycleHookParent.vue'
 // import SlotParent from './components/practice/SlotParent.vue'
@@ -38,6 +39,7 @@ onUnmounted(() => log('onUnmounted'))
     </header>
   <!-- <StoreCounter /> -->
   <RouterView />
+  <UserForm />
 </template>
 
 <style scoped>
