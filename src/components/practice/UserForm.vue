@@ -37,16 +37,10 @@ const handleRegister = async () => {
       </el-form-item>
 
       <el-form-item>
-        <el-switch
-          v-model="userForm.agree"
-          active-text="동의함"
-          inactive-text="동의하지 않음"
-        />
+        <el-switch v-model="userForm.agree" active-text="동의함" inactive-text="동의하지 않음" />
       </el-form-item>
 
-      <el-button type="primary" native-type="submit">
-        가입하기
-      </el-button>
+      <el-button type="primary" native-type="submit"> 가입하기 </el-button>
     </el-form>
   </el-card>
 </template>

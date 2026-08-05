@@ -19,11 +19,7 @@ const totalPrice = computed(() => {
     <el-space direction="vertical" alignment="start">
       <label>구매 수량 선택</label>
       <el-space alignment="center">
-        <el-input-number
-        v-model="productQuantity"
-        :min="1"
-        :max="10"
-        />
+        <el-input-number v-model="productQuantity" :min="1" :max="10" />
         <span>(최대 10개 구매 가능)</span>
       </el-space>
 

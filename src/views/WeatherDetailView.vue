@@ -9,10 +9,10 @@ const configStore = useConfigStore()
 const isLoading = ref(false)
 
 const props = defineProps({
-    cityId: {
-        type: String,
-        required: true,
-    }
+  cityId: {
+    type: String,
+    required: true,
+  },
 })
 
 const cityMapping = {
@@ -43,12 +43,12 @@ const displayTemp = computed(() => {
 })
 
 const handleGoHome = () => {
-    router.push('/')
+  router.push('/')
 }
 
 const city = ref(null)
 
-onMounted(async() => {
+onMounted(async () => {
   // const id = route.params.cityId
   const targetCity = cityMapping[props.cityId]
   const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY
@@ -56,7 +56,7 @@ onMounted(async() => {
 
   if (targetCity) {
     isLoading.value = true
-    
+
     try {
       const response = await axios.get(BASE_URL, {
         params: {
@@ -70,11 +70,11 @@ onMounted(async() => {
       const raw = response.data
 
       city.value = {
-          name: targetCity.korean,
-          temp: raw.main.temp,
-          status: raw.weather[0].description,
-          humidity: `${raw.main.humidity}`,
-          wind: `${raw.wind.speed}`,
+        name: targetCity.korean,
+        temp: raw.main.temp,
+        status: raw.weather[0].description,
+        humidity: `${raw.main.humidity}`,
+        wind: `${raw.wind.speed}`,
       }
     } catch (error) {
       console.error('🔴 상세 정보 로딩 중 네트워크 에러 발생:', error)
@@ -83,7 +83,6 @@ onMounted(async() => {
     }
   }
 })
-
 </script>
 
 <template>
@@ -103,9 +102,13 @@ onMounted(async() => {
         </div>
       </template>
 
-      <p v-else class="status-message"> 해당 지역의 상세 데이터 장부가 존재하지 않거나 에러가 발생했습니다. </p>
+      <p v-else class="status-message">
+        해당 지역의 상세 데이터 장부가 존재하지 않거나 에러가 발생했습니다.
+      </p>
 
-      <button class="home-link" @click="handleGoHome" type="button"> ← 메인 대시보드로 돌아가기 </button>
+      <button class="home-link" @click="handleGoHome" type="button">
+        ← 메인 대시보드로 돌아가기
+      </button>
     </section>
   </main>
 </template>
@@ -141,5 +144,4 @@ onMounted(async() => {
   font-weight: 700;
   text-decoration: none;
 }
-
 </style>

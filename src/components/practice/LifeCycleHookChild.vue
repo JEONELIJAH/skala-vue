@@ -17,7 +17,7 @@ const props = defineProps({
   childCount: {
     type: Number,
     required: true,
-  }
+  },
 })
 
 const emit = defineEmits(['child-count'])
@@ -48,6 +48,6 @@ watch(
     <p>Parent count: {{ props.parentCount }}</p>
     <p>Child count: {{ childCount }}</p>
 
-    <button @click="(emit('child-count', props.childCount + 1))">자식만 변경</button>
+    <button @click="emit('child-count', props.childCount + 1)">자식만 변경</button>
   </section>
 </template>

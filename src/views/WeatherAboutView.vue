@@ -55,5 +55,4 @@
   margin: 0;
   padding-left: 1.25rem;
 }
-
 </style>

@@ -29,7 +29,7 @@ const cityLocations = [
   { id: 10, name: '데스밸리', lat: 36.4641, lon: -116.8687 },
 ]
 
-const fetchRealTimeWeather = async() => {
+const fetchRealTimeWeather = async () => {
   isLoading.value = true
 
   try {
@@ -43,9 +43,9 @@ const fetchRealTimeWeather = async() => {
             appid: API_KEY,
             units: 'metric',
             lang: 'kr',
-          }
+          },
         })
-      })
+      }),
     )
 
     weatherList.value = responses.map((response, index) => {
@@ -60,9 +60,9 @@ const fetchRealTimeWeather = async() => {
       }
     })
   } catch (error) {
-      console.error('🔴 날씨 정보 로딩 중 네트워크 에러 발생:', error)
-    } finally {
-      isLoading.value = false
+    console.error('🔴 날씨 정보 로딩 중 네트워크 에러 발생:', error)
+  } finally {
+    isLoading.value = false
   }
 }
 
@@ -103,7 +103,7 @@ const handleGoDetail = (city) => {
   // window.alert(`${city.name}의 현재 날씨는 [${city.status}] 상태입니다.`)
   router.push({
     name: 'weather-detail',
-    params: {cityId: city.id}
+    params: { cityId: city.id },
   })
 }
 
@@ -130,7 +130,9 @@ onUpdated(() => log('onUpdated'))
     <BaseDashboardCard>
       <h2 id="weather-title">🌆 지역별 날씨 현황</h2>
 
-      <p v-if="isLoading" class="status-message">🔄 글로벌 기상 위성으로부터 실시간 기상 데이터를 수신 중입니다...</p>
+      <p v-if="isLoading" class="status-message">
+        🔄 글로벌 기상 위성으로부터 실시간 기상 데이터를 수신 중입니다...
+      </p>
 
       <template v-else>
         <ul v-if="filteredWeatherList.length > 0" class="weather-list">

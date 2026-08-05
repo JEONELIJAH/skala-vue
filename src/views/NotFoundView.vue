@@ -3,7 +3,7 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 const handleGoHome = () => {
-    router.push('/')
+  router.push('/')
 }
 </script>
 
@@ -13,7 +13,7 @@ const handleGoHome = () => {
       <div class="not-found-icon">☀️ ❓</div>
       <h2 id="not-found-title">페이지를 찾을 수 없습니다.</h2>
       <p>요청하신 주소가 존재하지 않거나,<br />아직 개발되지 않았습니다.</p>
-      <button class="home-link" @click="handleGoHome" type="button"> 날씨 메인으로 이동 </button>
+      <button class="home-link" @click="handleGoHome" type="button">날씨 메인으로 이동</button>
     </section>
   </main>
 </template>

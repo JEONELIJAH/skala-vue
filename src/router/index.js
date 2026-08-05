@@ -23,7 +23,7 @@ const router = createRouter({
       name: 'weather-detail',
       props: true,
       component: () => import('../views/WeatherDetailView.vue'),
-    }
+    },
   ],
 })
 

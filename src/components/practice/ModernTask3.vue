@@ -44,14 +44,10 @@ const runTask3 = async () => {
   <section>
     <h2>과제 3: 비동기 연쇄 파이프라인 (Async/Await)</h2>
     <label>
-      <input v-model="shouldFail" type="checkbox">
+      <input v-model="shouldFail" type="checkbox" />
       프로필 요청 실패시키기
     </label>
-    <button
-      type="button"
-      :disabled="isLoading"
-      @click="runTask3"
-    >
+    <button type="button" :disabled="isLoading" @click="runTask3">
       {{ isLoading ? '동기화 중...' : '동기화 시작' }}
     </button>
     <p>{{ result3 }}</p>
