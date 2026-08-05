@@ -1,73 +1,77 @@
-/* color palette from <https://github.com/vuejs/theme> */
 :root {
-  --vt-c-white: #ffffff;
-  --vt-c-white-soft: #f8f8f8;
-  --vt-c-white-mute: #f2f2f2;
+  color-scheme: light;
+  --color-background: #417fbd;
+  --color-background-soft: rgb(31 87 141 / 38%);
+  --color-background-mute: rgb(42 100 154 / 42%);
+  --color-surface-raised: rgb(29 84 137 / 34%);
+  --color-border: rgb(239 248 255 / 24%);
+  --color-border-hover: rgb(245 251 255 / 44%);
+  --color-heading: #f8fcff;
+  --color-text: #e8f3fb;
+  --color-text-muted: #c6dbea;
+  --color-primary: #d8efff;
+  --color-primary-hover: #ffffff;
+  --color-primary-soft: rgb(255 255 255 / 14%);
+  --content-width: 60rem;
+  --radius-control: 0.625rem;
+  --radius-card: 0.875rem;
+  --radius-panel: 1rem;
+  --shadow-card: 0 0.5rem 1.5rem rgb(17 54 89 / 16%);
+  --shadow-raised: 0 1rem 2.5rem rgb(17 54 89 / 22%);
+  --transition-fast: 160ms ease;
+  --app-sky-image: url('./weather/clear-day-v2.jpg');
+  --app-sky-overlay: rgb(65 127 189 / 76%);
+  --glass-surface: rgb(25 79 131 / 32%);
+  --glass-surface-strong: rgb(24 76 127 / 44%);
+  --glass-control: rgb(20 70 117 / 28%);
+  --glass-control-hover: rgb(255 255 255 / 18%);
+  --glass-accent: rgb(255 255 255 / 16%);
+  --glass-border: rgb(246 251 255 / 28%);
+  --glass-filter: blur(20px) saturate(125%);
 
-  --vt-c-black: #181818;
-  --vt-c-black-soft: #222222;
-  --vt-c-black-mute: #282828;
-
-  --vt-c-indigo: #2c3e50;
-
-  --vt-c-divider-light-1: rgba(60, 60, 60, 0.29);
-  --vt-c-divider-light-2: rgba(60, 60, 60, 0.12);
-  --vt-c-divider-dark-1: rgba(84, 84, 84, 0.65);
-  --vt-c-divider-dark-2: rgba(84, 84, 84, 0.48);
-
-  --vt-c-text-light-1: var(--vt-c-indigo);
-  --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
-  --vt-c-text-dark-1: var(--vt-c-white);
-  --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
-}
-
-/* semantic color variables for this project */
-:root {
-  --color-background: var(--vt-c-white);
-  --color-background-soft: var(--vt-c-white-soft);
-  --color-background-mute: var(--vt-c-white-mute);
-
-  --color-border: var(--vt-c-divider-light-2);
-  --color-border-hover: var(--vt-c-divider-light-1);
-
-  --color-heading: var(--vt-c-text-light-1);
-  --color-text: var(--vt-c-text-light-1);
-
-  --section-gap: 160px;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-background: var(--vt-c-black);
-    --color-background-soft: var(--vt-c-black-soft);
-    --color-background-mute: var(--vt-c-black-mute);
-
-    --color-border: var(--vt-c-divider-dark-2);
-    --color-border-hover: var(--vt-c-divider-dark-1);
-
-    --color-heading: var(--vt-c-text-dark-1);
-    --color-text: var(--vt-c-text-dark-2);
-  }
+  --el-color-primary: #2c6fa8;
+  --el-color-primary-light-3: #6c9bc2;
+  --el-color-primary-light-5: #96b6d1;
+  --el-color-primary-light-7: #bfd2e2;
+  --el-color-primary-light-8: #d5e2ec;
+  --el-color-primary-light-9: #eaf1f6;
+  --el-color-primary-dark-2: #245d8d;
+  --el-border-radius-base: var(--radius-control);
+  --el-border-color: var(--color-border);
+  --el-border-color-light: rgb(239 248 255 / 18%);
+  --el-fill-color-blank: var(--color-surface-raised);
+  --el-fill-color-light: var(--color-background-mute);
+  --el-bg-color: var(--color-surface-raised);
+  --el-bg-color-overlay: var(--color-surface-raised);
+  --el-text-color-primary: var(--color-heading);
+  --el-text-color-regular: var(--color-text);
+  --el-text-color-secondary: var(--color-text-muted);
+  --el-text-color-placeholder: rgb(232 243 251 / 62%);
 }
 
 *,
 *::before,
 *::after {
   box-sizing: border-box;
-  margin: 0;
-  font-weight: normal;
+}
+
+html {
+  background: var(--color-background);
 }
 
 body {
+  position: relative;
+  z-index: 0;
+  margin: 0;
   min-height: 100vh;
   color: var(--color-text);
-  background: var(--color-background);
-  transition:
-    color 0.5s,
-    background-color 0.5s;
-  line-height: 1.6;
+  background: transparent;
+  overflow-x: hidden;
+  isolation: isolate;
+  line-height: 1.5;
   font-family:
     Inter,
+    Pretendard,
     -apple-system,
     BlinkMacSystemFont,
     'Segoe UI',
@@ -79,8 +83,80 @@ body {
     'Droid Sans',
     'Helvetica Neue',
     sans-serif;
-  font-size: 15px;
+  font-size: 16px;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body::before,
+body::after {
+  position: fixed;
+  pointer-events: none;
+  content: '';
+}
+
+body::before {
+  inset: -4%;
+  z-index: -2;
+  background-image: var(--app-sky-image);
+  background-position: 42% 50%;
+  background-size: cover;
+  transform: scale(1.04);
+  animation: app-sky-drift 90s ease-in-out infinite alternate;
+}
+
+body::after {
+  inset: 0;
+  z-index: -1;
+  background: var(--app-sky-overlay);
+  backdrop-filter: blur(4px) saturate(105%);
+  -webkit-backdrop-filter: blur(4px) saturate(105%);
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+h1,
+h2,
+h3,
+strong {
+  color: var(--color-heading);
+}
+
+:focus-visible {
+  outline: 3px solid rgb(255 255 255 / 52%);
+  outline-offset: 3px;
+}
+
+@keyframes app-sky-drift {
+  from {
+    background-position: 38% 48%;
+  }
+
+  to {
+    background-position: 58% 52%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }
