@@ -18,10 +18,10 @@ const props = defineProps({
 
 const cityMapping = {
   1: { lat: 37.5665, lon: 126.978, korean: '대한민국 서울특별시' },
-  2: { lat: 37.2636, lon: 127.0286, korean: '경기도 수원시 영통구' },
-  3: { lat: 35.1631, lon: 129.1635, korean: '부산광역시 해운대구' },
-  4: { lat: 37.4563, lon: 126.7052, korean: '인천광역시' },
-  5: { lat: 33.4996, lon: 126.5312, korean: '제주특별자치도 제주시' },
+  2: { lat: 37.2636, lon: 127.0286, korean: '대한민국 경기도 수원시' },
+  3: { lat: 35.1631, lon: 129.1635, korean: '대한민국 부산광역시' },
+  4: { lat: 37.4563, lon: 126.7052, korean: '대한민국 인천광역시' },
+  5: { lat: 33.4996, lon: 126.5312, korean: '대한민국 제주특별자치도 제주시' },
 }
 
 const displayTemp = computed(() => {
@@ -47,17 +47,18 @@ const city = ref(null)
 onMounted(async() => {
   // const id = route.params.cityId
   const targetCity = cityMapping[props.cityId]
-  const apiKey = import.meta.env.VITE_OPENWEATHER_API_KEY
+  const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY
+  const BASE_URL = 'https://api.openweathermap.org/data/2.5/weather'
 
   if (targetCity) {
     isLoading.value = true
     
     try {
-      const response = await axios.get('https://api.openweathermap.org/data/2.5/weather', {
+      const response = await axios.get(BASE_URL, {
         params: {
           lat: targetCity.lat,
           lon: targetCity.lon,
-          appid: apiKey,
+          appid: API_KEY,
           units: 'metric',
           lang: 'kr',
         },
@@ -90,7 +91,7 @@ onMounted(async() => {
 
       <template v-else-if="city">
         <div class="weather-summary">
-          <p>📍 지정 지역: 대한민국 {{ city.name }}</p>
+          <p>📍 지정 지역: {{ city.name }}</p>
           <p>실시간 기온: {{ displayTemp }}{{ configStore.unitSymbol }}</p>
           <p>기상 현황: {{ city.status }}</p>
           <p>대기 습도: {{ city.humidity }}%</p>
