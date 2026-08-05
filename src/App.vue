@@ -9,6 +9,8 @@ import {
   onBeforeUpdate,
 } from 'vue'
 import UnitToggler from './components/exercise/UnitToggler.vue'
+// import ModernTask2 from './components/practice/ModernTask2.vue'
+// import ModernTask3 from './components/practice/ModernTask3.vue'
 // import ModernTask1 from './components/practice/ModernTask1.vue'
 // import DownloadForm from './components/practice/DownloadForm.vue'
 // import RateForm from './components/practice/RateForm.vue'
