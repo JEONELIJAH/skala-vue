@@ -22,6 +22,11 @@ const cityMapping = {
   3: { lat: 35.1631, lon: 129.1635, korean: '대한민국 부산광역시' },
   4: { lat: 37.4563, lon: 126.7052, korean: '대한민국 인천광역시' },
   5: { lat: 33.4996, lon: 126.5312, korean: '대한민국 제주특별자치도 제주시' },
+  6: { lat: 78.2232, lon: 15.6469, korean: '북극 스발바르' },
+  7: { lat: -77.8419, lon: 166.6863, korean: '남극 맥머도 기지' },
+  8: { lat: 31.1, lon: -4, korean: '모로코 사하라 사막' },
+  9: { lat: -22.9087, lon: -68.1997, korean: '칠레 아타카마 사막' },
+  10: { lat: 36.4641, lon: -116.8687, korean: '미국 데스밸리' },
 }
 
 const displayTemp = computed(() => {

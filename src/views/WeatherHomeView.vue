@@ -22,6 +22,11 @@ const cityLocations = [
   { id: 3, name: '부산', lat: 35.1631, lon: 129.1635 },
   { id: 4, name: '인천', lat: 37.4563, lon: 126.7052 },
   { id: 5, name: '제주', lat: 33.4996, lon: 126.5312 },
+  { id: 6, name: '북극', lat: 78.2232, lon: 15.6469 },
+  { id: 7, name: '남극', lat: -77.8419, lon: 166.6863 },
+  { id: 8, name: '사하라 사막', lat: 31.1, lon: -4.0 },
+  { id: 9, name: '아타카마 사막', lat: -22.9087, lon: -68.1997 },
+  { id: 10, name: '데스밸리', lat: 36.4641, lon: -116.8687 },
 ]
 
 const fetchRealTimeWeather = async() => {
