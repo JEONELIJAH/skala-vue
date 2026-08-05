@@ -1,6 +1,9 @@
 <script setup>
 import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+// 빌드 후 값 치환 확인
+// const api = import.meta.env.VITE_API_URL
+// console.log(api)
 
 const downloadProgress = ref(0)
 const isDownloading = ref(false)
