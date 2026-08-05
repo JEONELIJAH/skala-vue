@@ -17,11 +17,11 @@ const props = defineProps({
 })
 
 const cityMapping = {
-  1: { english: 'Seoul', korean: '대한민국 서울특별시' },
-  2: { english: 'Suwon', korean: '경기도 수원시 영통구' },
-  3: { english: 'Busan', korean: '부산광역시 해운대구' },
-  4: { english: 'Incheon', korean: '인천광역시' },
-  5: { english: 'Jeju City', korean: '제주특별자치도 제주시' },
+  1: { lat: 37.5665, lon: 126.978, korean: '대한민국 서울특별시' },
+  2: { lat: 37.2636, lon: 127.0286, korean: '경기도 수원시 영통구' },
+  3: { lat: 35.1631, lon: 129.1635, korean: '부산광역시 해운대구' },
+  4: { lat: 37.4563, lon: 126.7052, korean: '인천광역시' },
+  5: { lat: 33.4996, lon: 126.5312, korean: '제주특별자치도 제주시' },
 }
 
 const displayTemp = computed(() => {
@@ -55,7 +55,8 @@ onMounted(async() => {
     try {
       const response = await axios.get('https://api.openweathermap.org/data/2.5/weather', {
         params: {
-          q: targetCity.english,
+          lat: targetCity.lat,
+          lon: targetCity.lon,
           appid: apiKey,
           units: 'metric',
           lang: 'kr',
@@ -67,8 +68,8 @@ onMounted(async() => {
           name: targetCity.korean,
           temp: raw.main.temp,
           status: raw.weather[0].description,
-          humidity: `${raw.main.humidity}%`,
-          wind: `${raw.wind.speed}m/s`,
+          humidity: `${raw.main.humidity}`,
+          wind: `${raw.wind.speed}`,
       }
     } catch (error) {
       console.error('🔴 상세 정보 로딩 중 네트워크 에러 발생:', error)
