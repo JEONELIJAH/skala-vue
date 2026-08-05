@@ -9,7 +9,7 @@ import {
   onBeforeUpdate,
 } from 'vue'
 // element-plus icons 불러오기
-import { InfoFilled, Odometer, PartlyCloudy } from '@element-plus/icons-vue'
+import { Collection, InfoFilled, Odometer, PartlyCloudy } from '@element-plus/icons-vue'
 import UnitToggler from './components/exercise/UnitToggler.vue'
 import clearDay from './assets/weather/clear-day-v2.jpg'
 import clearNight from './assets/weather/clear-night-stars-v3.jpg'
@@ -145,6 +145,21 @@ onUnmounted(() => {
           >
             <el-icon><InfoFilled /></el-icon>
             <span>서비스 소개</span>
+          </a>
+        </RouterLink>
+        <RouterLink
+          v-slot="{ href, isExactActive, navigate }"
+          custom
+          :to="{ name: 'code-challenges' }"
+        >
+          <a
+            class="navigation"
+            :class="{ 'navigation--active': isExactActive }"
+            :href="href"
+            @click="navigate"
+          >
+            <el-icon><Collection /></el-icon>
+            <span>코드 챌린지</span>
           </a>
         </RouterLink>
       </nav>

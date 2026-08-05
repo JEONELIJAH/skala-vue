@@ -14,15 +14,20 @@ const router = createRouter({
       component: () => import('../views/WeatherAboutView.vue'),
     },
     {
-      path: '/:pathMathch(.*)*',
-      name: 'not-found',
-      component: () => import('../views/NotFoundView.vue'),
+      path: '/challenges',
+      name: 'code-challenges',
+      component: () => import('../views/CodeChallengesView.vue'),
     },
     {
       path: '/weather/:cityId',
       name: 'weather-detail',
       props: true,
       component: () => import('../views/WeatherDetailView.vue'),
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      component: () => import('../views/NotFoundView.vue'),
     },
   ],
 })
