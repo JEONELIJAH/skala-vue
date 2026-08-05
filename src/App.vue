@@ -9,7 +9,7 @@ import {
   onBeforeUpdate,
 } from 'vue'
 import UnitToggler from './components/exercise/UnitToggler.vue'
-import DownloadForm from './components/practice/DownloadForm.vue'
+// import DownloadForm from './components/practice/DownloadForm.vue'
 // import RateForm from './components/practice/RateForm.vue'
 // import UserForm from './components/practice/UserForm.vue'
 // import HelloWorld from './components/HelloWorld.vue'
@@ -40,7 +40,6 @@ onUnmounted(() => log('onUnmounted'))
       </nav>
     </header>
   <RouterView />
-  <DownloadForm />
 </template>
 
 <style scoped>
