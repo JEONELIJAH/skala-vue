@@ -49,7 +49,7 @@ const styleObject = computed(() => ({
         <el-button type="primary" @click="count++">숫자 증가</el-button>
       </div>
 
-      // interpolation을 사용하여 ref 값과 계산식을 화면에 출력합니다.
+      <!-- interpolation을 사용하여 ref 값과 계산식을 화면에 출력합니다. -->
       <div class="result-strip">
         {{ studentName || '이름 없음' }}님의 값은 {{ count }}이고, 두 배는 {{ count * 2 }}입니다.
       </div>
@@ -64,9 +64,9 @@ const styleObject = computed(() => ({
         </div>
       </div>
 
-      // v-html
+      <!-- v-html -->
       <p class="html-result" v-html="plainText"></p>
-      // v-text
+      <!-- v-text -->
       <p class="text-result" v-text="plainText"></p>
       <el-input v-model="untrustedHtml" placeholder="내용을 입력하세요" />
       <el-button @click="showMessage">v-html로 렌더링</el-button>
@@ -155,7 +155,7 @@ const styleObject = computed(() => ({
         <p>
           <code>현재 count값: {{ count }}</code>
         </p>
-        // v-memo는 의존성 배열이 바뀌지 않으면 렌더링을 건너뜁니다.
+        <!-- v-memo는 의존성 배열이 바뀌지 않으면 렌더링을 건너뜁니다. -->
         <p v-memo="[memoVersion]">
           <code>v-memo 현재 값: {{ count }}</code>
         </p>

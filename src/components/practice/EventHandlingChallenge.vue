@@ -37,7 +37,7 @@ const handleSubmit = () => {
       <h3>v-on Event Handler</h3>
       <p>인라인 표현식과 메서드 핸들러를 비교합니다.</p>
       <div class="control-row">
-        // v-on 인라인으로 클릭 횟수를 증가시킵니다.
+        <!-- v-on 인라인으로 클릭 횟수를 증가시킵니다. -->
         <el-button type="primary" @click="clickCount++">인라인 증가</el-button>
         <el-button @click="clickCount = 0">초기화</el-button>
       </div>
