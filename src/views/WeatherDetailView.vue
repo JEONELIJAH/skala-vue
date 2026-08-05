@@ -1,13 +1,35 @@
 <script setup>
-import { defineProps, ref, onMounted, computed } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useConfigStore } from '@/stores/configStore'
+import {
+  ArrowLeft,
+  Cloudy,
+  Compass,
+  Drizzling,
+  LocationFilled,
+  MostlyCloudy,
+  Odometer,
+  Pouring,
+  Sunrise,
+  Sunny,
+  View,
+} from '@element-plus/icons-vue'
 import axios from 'axios'
+import { useConfigStore } from '@/stores/configStore'
+import {
+  formatLocalObservationTime,
+  getTimeOfDay,
+  getWeatherBackground,
+  getWeatherKind,
+} from '@/utils/weatherVisuals'
 
 const router = useRouter()
 const configStore = useConfigStore()
-const isLoading = ref(false)
+const isLoading = ref(true)
+const city = ref(null)
 
+// 부모 컴포넌트가 아닌, Vue Router를 통해 URL params를 props로 전달받습니다. (props: true)
+// 이 전달받은 cityId를 기반으로 상세 날씨 데이터를 로드합니다.
 const props = defineProps({
   cityId: {
     type: String,
@@ -28,120 +50,485 @@ const cityMapping = {
   10: { lat: 36.4641, lon: -116.8687, korean: '미국 데스밸리' },
 }
 
-const displayTemp = computed(() => {
-  const rawTemp = city.value?.temp
+// 온도 변환 함수
+const convertTemp = (temperature) => {
+  const convertedTemp = configStore.unit === 'fahrenheit' ? (temperature * 9) / 5 + 32 : temperature
 
-  if (rawTemp === null) {
-    return ''
+  return Number(convertedTemp.toFixed(1))
+}
+
+const displayTemp = computed(() => (city.value ? convertTemp(city.value.temp) : ''))
+const displayMaxTemp = computed(() => (city.value ? convertTemp(city.value.tempMax) : ''))
+const displayMinTemp = computed(() => (city.value ? convertTemp(city.value.tempMin) : ''))
+
+// 풍향을 각도로부터 텍스트로 변환하는 함수
+const getWindDirection = (degree = 0) => {
+  const directions = ['북', '북동', '동', '남동', '남', '남서', '서', '북서']
+  return directions[Math.round(degree / 45) % directions.length]
+}
+
+// 날씨와 시간대에 따른 CSS 클래스와 배경 이미지를 계산합니다.
+const weatherVisualClass = computed(() => {
+  // city가 아직 로드되지 않은 경우 빈 배열을 반환합니다.
+  if (!city.value) return []
+
+  return [
+    `weather-detail--${getWeatherKind(city.value.status)}`,
+    `weather-detail--${city.value.timeOfDay}`,
+  ]
+})
+
+// 상세 날씨 배경 스타일을 계산합니다.
+const detailBackgroundStyle = computed(() => {
+  // city가 아직 로드되지 않은 경우 빈 객체를 반환합니다.
+  if (!city.value) return {}
+
+  return {
+    backgroundImage: `url(${getWeatherBackground(city.value.status, city.value.timeOfDay)})`,
   }
+})
 
-  if (configStore.unit === 'fahrenheit') {
-    return Math.round((rawTemp * 9) / 5 + 32)
-  }
+const weatherMetrics = computed(() => {
+  // city가 아직 로드되지 않은 경우 빈 배열을 반환합니다.
+  if (!city.value) return []
 
-  return rawTemp
+  return [
+    {
+      label: '체감 온도',
+      value: `${convertTemp(city.value.feelsLike)}${configStore.unitSymbol}`,
+      description: '바람과 습도를 반영한 온도',
+      icon: Sunny,
+    },
+    {
+      label: '습도',
+      value: `${city.value.humidity}%`,
+      description: '현재 대기 중 수분 비율',
+      icon: Pouring,
+    },
+    {
+      label: '풍속',
+      value: `${city.value.wind} m/s`,
+      description: city.value.windGust
+        ? `${city.value.windDirection}풍 · 돌풍 ${city.value.windGust} m/s`
+        : `${city.value.windDirection}풍 · ${city.value.windDegrees}°`,
+      icon: Compass,
+    },
+    {
+      label: '구름량',
+      value: `${city.value.cloudiness}%`,
+      description: '현재 하늘을 덮고 있는 구름의 비율',
+      icon: Cloudy,
+    },
+    {
+      label: '기압',
+      value: `${city.value.pressure.toLocaleString()} hPa`,
+      description: '해수면 기준 대기 압력',
+      icon: Odometer,
+    },
+    {
+      label: '가시거리',
+      value: `${city.value.visibility.toFixed(1)} km`,
+      description: '육안으로 확인 가능한 거리',
+      icon: View,
+    },
+    {
+      label: '시간 강수량',
+      value: `${city.value.precipitation} mm`,
+      description: '최근 한 시간 동안의 강수량',
+      icon: Drizzling,
+    },
+    {
+      label: '일출 · 일몰',
+      value: city.value.sunrise,
+      description: `일몰 ${city.value.sunset}`,
+      icon: Sunrise,
+    },
+  ]
 })
 
 const handleGoHome = () => {
   router.push('/')
 }
 
-const city = ref(null)
-
+// 컴포넌트가 마운트될 때, cityId를 기반으로 OpenWeather API에서 상세 날씨 데이터를 가져옵니다.
 onMounted(async () => {
-  // const id = route.params.cityId
   const targetCity = cityMapping[props.cityId]
   const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY
   const BASE_URL = 'https://api.openweathermap.org/data/2.5/weather'
 
-  if (targetCity) {
-    isLoading.value = true
+  // cityId에 해당하는 도시 정보가 없으면 로딩 상태를 false로 설정하고 함수를 종료합니다.
+  if (!targetCity) {
+    isLoading.value = false
+    return
+  }
 
-    try {
-      const response = await axios.get(BASE_URL, {
-        params: {
-          lat: targetCity.lat,
-          lon: targetCity.lon,
-          appid: API_KEY,
-          units: 'metric',
-          lang: 'kr',
-        },
-      })
-      const raw = response.data
+  // OpenWeather API를 호출하여 상세 날씨 데이터를 await를 사용하여 비동기로 가져옵니다.
+  try {
+    const response = await axios.get(BASE_URL, {
+      params: {
+        lat: targetCity.lat,
+        lon: targetCity.lon,
+        appid: API_KEY,
+        units: 'metric',
+        lang: 'kr',
+      },
+    })
+    const raw = response.data
 
-      city.value = {
-        name: targetCity.korean,
-        temp: raw.main.temp,
-        status: raw.weather[0].description,
-        humidity: `${raw.main.humidity}`,
-        wind: `${raw.wind.speed}`,
-      }
-    } catch (error) {
-      console.error('🔴 상세 정보 로딩 중 네트워크 에러 발생:', error)
-    } finally {
-      isLoading.value = false
+    city.value = {
+      name: targetCity.korean, // 한국어 이름
+      temp: raw.main.temp, // 현재 온도
+      tempMax: raw.main.temp_max, // 최고 온도
+      tempMin: raw.main.temp_min, // 최저 온도
+      feelsLike: raw.main.feels_like, // 체감 온도
+      status: raw.weather[0]?.description ?? '정보 없음', // 날씨 상태 optional chainin, nullish coalescing 사용
+      humidity: raw.main.humidity, // 습도
+      wind: raw.wind.speed, // 풍속
+      windGust: raw.wind.gust, // 돌풍
+      windDegrees: raw.wind.deg ?? 0, // 풍향 각도
+      windDirection: getWindDirection(raw.wind.deg), // 풍향 텍스트
+      cloudiness: raw.clouds?.all ?? 0, // 구름량
+      pressure: raw.main.pressure, // 기압
+      visibility: (raw.visibility ?? 0) / 1000, // 가시거리
+      precipitation: raw.rain?.['1h'] ?? raw.snow?.['1h'] ?? 0, // 강수량
+      localTime: formatLocalObservationTime(raw.dt, raw.timezone), // 관측 시간
+      sunrise: formatLocalObservationTime(raw.sys?.sunrise, raw.timezone), // 일출 시간
+      sunset: formatLocalObservationTime(raw.sys?.sunset, raw.timezone), // 일몰 시간
+      iconUrl: raw.weather[0]?.icon
+        ? `https://openweathermap.org/img/wn/${raw.weather[0].icon}@2x.png`
+        : '', // 아이콘 URL
+      timeOfDay: getTimeOfDay({
+        // 낮/밤 구분을 위한 시간대 계산
+        currentTime: raw.dt,
+        sunrise: raw.sys?.sunrise,
+        sunset: raw.sys?.sunset,
+        timezoneOffset: raw.timezone,
+      }),
     }
+  } catch (error) {
+    console.error('상세 날씨 정보 로딩 중 네트워크 오류가 발생했습니다.', error)
+  } finally {
+    isLoading.value = false
   }
 })
 </script>
 
 <template>
-  <main class="detail">
-    <section class="detail-card">
-      <h2 id="detail-title">📊 지역별 상세 기상 관측 정보</h2>
+  <main class="detail-page">
+    <el-card v-if="isLoading" class="loading-panel" shadow="never">
+      <el-skeleton :rows="7" animated />
+      <p>날씨 정보를 불러오고 있습니다.</p>
+    </el-card>
 
-      <p v-if="isLoading" class="status-message">상세 날씨 정보를 불러오는 중입니다...</p>
+    <section
+      v-else-if="city"
+      class="weather-detail"
+      :class="weatherVisualClass"
+      :style="detailBackgroundStyle"
+    >
+      <header class="weather-hero">
+        <p class="weather-hero__location">
+          <el-icon><LocationFilled /></el-icon>
+          {{ city.name }}
+        </p>
+        <!-- 현지 시각 -->
+        <span class="weather-hero__time">{{ city.localTime }} 현지 시각</span>
 
-      <template v-else-if="city">
-        <div class="weather-summary">
-          <p>📍 지정 지역: {{ city.name }}</p>
-          <p>실시간 기온: {{ displayTemp }}{{ configStore.unitSymbol }}</p>
-          <p>기상 현황: {{ city.status }}</p>
-          <p>대기 습도: {{ city.humidity }}%</p>
-          <p>현재 풍속: {{ city.wind }}m/s</p>
+        <!-- 현재 온도 -->
+        <div class="weather-hero__temperature">
+          <strong>{{ displayTemp }}</strong>
+          <span>{{ configStore.unitSymbol }}</span>
         </div>
-      </template>
 
-      <p v-else class="status-message">
-        해당 지역의 상세 데이터 장부가 존재하지 않거나 에러가 발생했습니다.
-      </p>
+        <!-- 날씨 상태 -->
+        <p class="weather-hero__status">
+          <img v-if="city.iconUrl" :src="city.iconUrl" :alt="city.status" />
+          <el-icon v-else><MostlyCloudy /></el-icon>
+          {{ city.status }}
+        </p>
 
-      <button class="home-link" @click="handleGoHome" type="button">
-        ← 메인 대시보드로 돌아가기
-      </button>
+        <!-- 온도 범위 -->
+        <p class="weather-hero__range">
+          최고 {{ displayMaxTemp }}{{ configStore.unitSymbol }} · 최저 {{ displayMinTemp
+          }}{{ configStore.unitSymbol }}
+        </p>
+      </header>
+
+      <!-- 날씨 지표 -->
+      <section class="weather-metrics">
+        <article v-for="metric in weatherMetrics" :key="metric.label" class="weather-metric">
+          <header>
+            <el-icon><component :is="metric.icon" /></el-icon>
+            <span>{{ metric.label }}</span>
+          </header>
+          <strong>{{ metric.value }}</strong>
+          <p>{{ metric.description }}</p>
+        </article>
+      </section>
+
+      <footer class="weather-detail__footer">
+        <el-button :icon="ArrowLeft" @click="handleGoHome">메인으로 돌아가기</el-button>
+        <p>OpenWeather · {{ city.localTime }} 업데이트</p>
+      </footer>
     </section>
+
+    <!-- 에러 메시지 -->
+    <el-card v-else class="error-panel" shadow="never">
+      <el-result
+        icon="warning"
+        title="지역 정보를 불러오지 못했습니다"
+        sub-title="도시 코드가 올바른지 확인하거나 잠시 후 다시 시도해 주세요."
+      >
+        <template #extra>
+          <el-button type="primary" :icon="ArrowLeft" @click="handleGoHome">
+            메인으로 돌아가기
+          </el-button>
+        </template>
+      </el-result>
+    </el-card>
   </main>
 </template>
 
 <style scoped>
-.detail {
+.detail-page {
   width: 100%;
-  max-width: 60rem;
-  margin: 2rem auto 0;
+  max-width: var(--content-width);
+  margin: 1.25rem auto 2rem;
 }
 
-.detail-card {
-  margin-top: 1rem;
-  padding: 1.25rem;
-  border: 1px solid var(--color-border);
-  border-radius: 0.75rem;
-  background: var(--color-background-soft);
+.weather-detail {
+  position: relative;
+  padding: clamp(1rem, 3vw, 1.5rem);
+  border: 1px solid rgb(255 255 255 / 34%);
+  border-radius: 1.35rem;
+  background-position: 44% 50%;
+  background-size: cover;
+  box-shadow: 0 1.5rem 3.5rem rgb(5 45 82 / 24%);
+  overflow: hidden;
+  isolation: isolate;
+  animation: weather-detail-drift 46s ease-in-out infinite alternate;
 }
 
-.detail-card p {
-  margin: 0 0 1rem;
+.weather-detail::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: rgb(3 43 78 / 30%);
+  content: '';
 }
 
-.home-link {
-  display: inline-flex;
+.weather-detail--cloudy::before {
+  background: rgb(11 33 51 / 34%);
+}
+
+.weather-detail--rain::before {
+  background: rgb(2 20 43 / 42%);
+}
+
+.weather-detail--night::before {
+  background: rgb(2 12 31 / 34%);
+}
+
+.weather-detail--night.weather-detail--rain::before {
+  background: rgb(1 8 24 / 42%);
+}
+
+.weather-hero {
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 2.75rem;
-  padding: 0.65rem 1.25rem;
-  border-radius: 999px;
-  background: #1683f7;
-  color: white;
+  min-height: 17rem;
+  padding: 2rem 1rem;
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 2px 12px rgb(0 31 63 / 38%);
+}
+
+.weather-hero__location,
+.weather-hero__status {
+  display: flex;
+  gap: 0.45rem;
+  align-items: center;
   font-weight: 700;
-  text-decoration: none;
+}
+
+.weather-hero__location {
+  font-size: clamp(1.15rem, 4vw, 1.55rem);
+}
+
+.weather-hero__time {
+  margin-top: 0.25rem;
+  color: rgb(255 255 255 / 76%);
+  font-size: 0.78rem;
+  font-weight: 650;
+}
+
+.weather-hero__temperature {
+  margin: 0.35rem 0;
+  line-height: 1;
+}
+
+.weather-hero__temperature strong {
+  color: #fff;
+  font-size: clamp(4.2rem, 14vw, 7rem);
+  font-variant-numeric: tabular-nums;
+  font-weight: 350;
+  letter-spacing: -0.08em;
+}
+
+.weather-hero__temperature span {
+  margin-left: 0.25rem;
+  font-size: clamp(1.2rem, 4vw, 1.8rem);
+  font-weight: 700;
+  vertical-align: top;
+}
+
+.weather-hero__status {
+  font-size: 1.05rem;
+}
+
+.weather-hero__status img {
+  width: 2.4rem;
+  height: 2.4rem;
+  margin: -0.6rem -0.25rem -0.6rem -0.5rem;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 6px rgb(0 24 48 / 30%));
+}
+
+.weather-hero__range {
+  margin-top: 0.55rem;
+  color: rgb(255 255 255 / 86%);
+  font-size: 0.88rem;
+  font-weight: 650;
+}
+
+.weather-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.weather-metric {
+  display: flex;
+  flex-direction: column;
+  min-height: 10rem;
+  padding: 1.1rem;
+  border: 1px solid rgb(255 255 255 / 30%);
+  border-radius: 1rem;
+  background: rgb(8 52 92 / 32%);
+  color: #fff;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 10%);
+  backdrop-filter: blur(16px) saturate(115%);
+}
+
+.weather-metric header {
+  display: flex;
+  gap: 0.45rem;
+  align-items: center;
+  color: rgb(255 255 255 / 68%);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.weather-metric > strong {
+  margin-top: 0.8rem;
+  color: #fff;
+  font-size: clamp(1.65rem, 5vw, 2.2rem);
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+}
+
+.weather-metric p {
+  margin-top: auto;
+  color: rgb(255 255 255 / 78%);
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.weather-detail__footer {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.weather-detail__footer > p {
+  color: rgb(255 255 255 / 72%);
+  font-size: 0.75rem;
+  font-weight: 650;
+}
+
+.weather-detail__footer .el-button {
+  min-height: 2.75rem;
+  border-color: rgb(255 255 255 / 35%);
+  background: rgb(6 36 69 / 28%);
+  color: #fff;
+  font-weight: 700;
+  backdrop-filter: blur(8px);
+}
+
+.weather-detail__footer .el-button:hover {
+  border-color: rgb(255 255 255 / 70%);
+  background: rgb(6 36 69 / 44%);
+  color: #fff;
+}
+
+.loading-panel,
+.error-panel {
+  border-color: var(--color-border);
+  border-radius: var(--radius-panel);
+  background: var(--color-surface-raised);
+}
+
+.loading-panel :deep(.el-card__body) {
+  padding: 2rem;
+}
+
+.loading-panel p {
+  margin-top: 1rem;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+@keyframes weather-detail-drift {
+  from {
+    background-position: 40% 50%;
+  }
+
+  to {
+    background-position: 60% 50%;
+  }
+}
+
+@media (max-width: 52rem) {
+  .weather-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 30rem) {
+  .weather-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .weather-metric {
+    min-height: 8.5rem;
+  }
+
+  .weather-detail__footer .el-button {
+    width: 100%;
+  }
+
+  .weather-detail__footer {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .weather-detail__footer > p {
+    text-align: center;
+  }
 }
 </style>
