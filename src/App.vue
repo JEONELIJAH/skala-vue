@@ -9,7 +9,8 @@ import {
   onBeforeUpdate,
 } from 'vue'
 import UnitToggler from './components/exercise/UnitToggler.vue'
-import RateForm from './components/practice/RateForm.vue'
+import DownloadForm from './components/practice/DownloadForm.vue'
+// import RateForm from './components/practice/RateForm.vue'
 // import UserForm from './components/practice/UserForm.vue'
 // import HelloWorld from './components/HelloWorld.vue'
 // import LifeCycleHookParent from './components/practice/LifeCycleHookParent.vue'
@@ -39,7 +40,7 @@ onUnmounted(() => log('onUnmounted'))
       </nav>
     </header>
   <RouterView />
-  <RateForm />
+  <DownloadForm />
 </template>
 
 <style scoped>
