@@ -4,6 +4,11 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/uljin',
+      name: 'uljin-weather',
+      component: () => import('../views/UljinWeatherView.vue'),
+    },
+    {
       path: '/',
       name: 'weather-home',
       component: () => import('../views/WeatherHomeView.vue'),

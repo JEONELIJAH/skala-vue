@@ -9,7 +9,7 @@ import {
   onBeforeUpdate,
 } from 'vue'
 // element-plus icons 불러오기
-import { Collection, InfoFilled, Odometer, PartlyCloudy } from '@element-plus/icons-vue'
+import { Collection, InfoFilled, Odometer, PartlyCloudy, Location } from '@element-plus/icons-vue'
 import UnitToggler from './components/exercise/UnitToggler.vue'
 import clearDay from './assets/weather/clear-day-v2.jpg'
 import clearNight from './assets/weather/clear-night-stars-v3.jpg'
@@ -114,6 +114,21 @@ onUnmounted(() => {
 
     <div class="navigation-bar">
       <nav class="navigation-menu">
+        <RouterLink
+          v-slot="{ href, isExactActive, navigate }"
+          custom
+          :to="{ name: 'uljin-weather' }"
+        >
+          <a
+            class="navigation"
+            :class="{ 'navigation--active': isExactActive }"
+            :href="href"
+            @click="navigate"
+          >
+            <el-icon><Location /></el-icon>
+            <span>울진 날씨</span>
+          </a>
+        </RouterLink>
         <!-- v-slot으로 href, isExactActive, navigate를 가져옵니다. -->
         <RouterLink
           v-slot="{ href, isExactActive, navigate }"
@@ -251,7 +266,7 @@ onUnmounted(() => {
   gap: 0.5rem;
   align-items: center;
   justify-content: center;
-  min-width: 9rem;
+  min-width: 0;
   height: 2.5rem;
   padding: 0 0.9rem;
   border-radius: 999px;
@@ -289,6 +304,9 @@ onUnmounted(() => {
   }
 
   .navigation-menu {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-radius: 1rem;
     width: 100%;
   }
 
